@@ -1,2 +1,19 @@
 ---
-# tasks file for ansible-role-touch-with-permissions
+- name: Touch a Single File
+  include_tasks: touchfile.yml
+  when:
+    - touch_file is defined
+    - touch_files is undefined
+
+- name: Touch Multiple Files
+  include_tasks: touchfile.yml
+  loop: "{{ touch_files if touch_files is defined else [] }}"
+  loop_control:
+    loop_var: touch_item
+  vars:
+    touch_file: "{{ touch_item.path }}"
+    touch_file_user_owner: "{{ touch_item.user if touch_item.user is defined else omit }}"
+    touch_file_group_owner: "{{ touch_item.owner if touch_item.owner is defined else omit }}"
+    touch_file_mode: "{{ touch_item.mode if touch_item.mode is defined else omit }}"
+  when:
+    - touch_files is defined

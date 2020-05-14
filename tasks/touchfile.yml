@@ -1,0 +1,8 @@
+---
+- name: Touch file "{{ touch_file }}"
+  file:
+    path: "{{ touch_file }}"
+    state: touch
+    owner: "{{ touch_file_user_owner if touch_file_user_owner is defined else 'root' }}"
+    group: "{{ touch_file_group_owner if touch_file_group_owner is defined else 'root' }}"
+    mode: "{{ touch_file_mode if touch_file_mode is defined else '0755' }}"
